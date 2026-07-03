@@ -161,7 +161,11 @@ void GroundSegmentationServer::EstimateGround(
   sensor_msgs::msg::PointCloud2 transformed_msg;
   if (msg->header.frame_id != target_frame_) {
     try {
-      auto transform = tf_buffer_->lookupTransform(target_frame_, msg->header.frame_id, tf2::TimePointZero, rclcpp::Duration::from_seconds(0.1));
+      auto transform = tf_buffer_->lookupTransform(
+    target_frame_,
+    msg->header.frame_id,
+    rclcpp::Time(0),
+    rclcpp::Duration::from_seconds(0.1));
       tf2::doTransform(*msg, transformed_msg, transform);
     } catch (const tf2::TransformException & ex) {
       RCLCPP_WARN(this->get_logger(), "Could not transform %s to %s: %s",
